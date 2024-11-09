@@ -6,7 +6,9 @@
 import { ref, onMounted, onBeforeUnmount } from 'vue'
 import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
-import albedoTexture from '../assets/Albedo.jpg'
+import Albedo from '../assets/Albedo.jpg'
+import Bump from '../assets/Bump.jpg'
+import Clouds from '../assets/Clouds.png'
 
 const textureLoader = new THREE.TextureLoader()
 
@@ -14,18 +16,15 @@ const textureLoader = new THREE.TextureLoader()
 const container = ref(null)
 
 // Constants (previously controlled by UI)
-const SUN_INTENSITY = 2.8
+const SUN_INTENSITY = 4.0
 const ROTATION_SPEED = 0.2
 
 // Three.js variables
-let scene, camera, renderer, controls, earth, dirLight, earthGroup
+let scene, camera, dirLight, renderer, controls, earth, clouds, group
 let animationFrameId = null
 
 const initScene = async () => {
   scene = new THREE.Scene()
-
-  const albedoMap = await textureLoader.loadAsync(albedoTexture)
-  albedoMap.colorSpace = THREE.SRGBColorSpace
 
   camera = new THREE.PerspectiveCamera(
     45,
@@ -49,21 +48,47 @@ const initScene = async () => {
   dirLight.position.set(-50, 0, 30)
   scene.add(dirLight)
 
-  earthGroup = new THREE.Group()
-  earthGroup.rotation.z = (23.5 / 360) * 2 * Math.PI
-
-  const earthGeometry = new THREE.SphereGeometry(10, 64, 64)
-  const earthMaterial = new THREE.MeshStandardMaterial({
-    map: albedoMap,
-  })
-  earth = new THREE.Mesh(earthGeometry, earthMaterial)
-  earthGroup.add(earth)
-  earth.rotateY(-0.3)
-
-  scene.add(earthGroup)
-
   const ambientLight = new THREE.AmbientLight(0x404040)
   scene.add(ambientLight)
+
+  group = new THREE.Group()
+  group.rotation.z = (23.5 / 360) * 2 * Math.PI
+  scene.add(group)
+
+  // Load all textures first
+  const [albedoMap, bumpMap, cloudsMap] = await Promise.all([
+    textureLoader.loadAsync(Albedo),
+    textureLoader.loadAsync(Bump),
+    textureLoader.loadAsync(Clouds)
+  ])
+  albedoMap.colorSpace = THREE.SRGBColorSpace
+
+  // Create geometries
+  const sphereGeometry = new THREE.SphereGeometry(10, 64, 64)
+  const cloudsGeometry = new THREE.SphereGeometry(10.05, 64, 64)
+
+  // Create materials
+  const earthMaterial = new THREE.MeshStandardMaterial({
+    map: albedoMap,
+    bumpMap: bumpMap,
+    bumpScale: 10,
+  })
+  const cloudsMaterial = new THREE.MeshStandardMaterial({
+    alphaMap: cloudsMap,
+    transparent: true,
+  })
+
+  // Create meshes
+  earth = new THREE.Mesh(sphereGeometry, earthMaterial)
+  clouds = new THREE.Mesh(cloudsGeometry, cloudsMaterial)
+
+  // Apply common rotations
+  earth.rotateY(-0.3)
+  clouds.rotateY(-0.3)
+
+  // Add to group
+  group.add(earth)
+  group.add(clouds)
 
   animate()
 }
@@ -72,6 +97,7 @@ const animate = () => {
   animationFrameId = requestAnimationFrame(animate)
   controls.update()
   earth.rotateY(0.005 * ROTATION_SPEED)
+  clouds.rotateY(0.006 * ROTATION_SPEED)
   renderer.render(scene, camera)
 }
 

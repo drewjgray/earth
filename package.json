@@ -11,7 +11,8 @@
     "vue": "^3.2.13"
   },
   "devDependencies": {
-    "@vue/cli-service": "~5.0.0"
+    "@vue/cli-service": "~5.0.0",
+    "raw-loader": "^4.0.2"
   },
   "browserslist": [
     "> 1%",

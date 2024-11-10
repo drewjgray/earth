@@ -13,9 +13,9 @@ import Ocean from '../assets/Ocean.png'
 import NightLights from '../assets/night_lights_modified.png'
 import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer'
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass'
-import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass'
+import vertexShader from '../shaders/vertex.glsl'
+import fragmentShader from '../shaders/fragment.glsl'
 
-const textureLoader = new THREE.TextureLoader()
 
 // Refs
 const container = ref(null)
@@ -25,8 +25,9 @@ const SUN_INTENSITY = 4.0
 const ROTATION_SPEED = 2.0
 
 // Three.js variables
-let scene, camera, dirLight, renderer, clock, controls, earth, clouds, group, composer
+let scene, camera, dirLight, renderer, clock, controls, earth, clouds, atmosphere, group, composer
 let animationFrameId = null
+const textureLoader = new THREE.TextureLoader()
 
 
 const initScene = async () => {
@@ -78,6 +79,7 @@ const initScene = async () => {
     // Create geometries
     const sphereGeometry = new THREE.SphereGeometry(10, 64, 64)
     const cloudsGeometry = new THREE.SphereGeometry(10.05, 64, 64)
+	const atmosphereGeometry = new THREE.SphereGeometry(12.5, 64, 64)
 
     // Create materials
     const earthMaterial = new THREE.MeshStandardMaterial({
@@ -136,10 +138,22 @@ const initScene = async () => {
 		opacity: 0.75,
     })
 
+	const atmosphereMaterial = new THREE.ShaderMaterial({
+		vertexShader: vertexShader,
+		fragmentShader: fragmentShader,
+		uniforms: {
+			atmOpacity: { value: 0.7 },
+			atmPowFactor: { value: 4.1 },
+			atmMultiplier: { value: 9.5 },
+		},
+		blending: THREE.AdditiveBlending,
+		side: THREE.BackSide,
+	})
+
     // Create meshes
     earth = new THREE.Mesh(sphereGeometry, earthMaterial)
     clouds = new THREE.Mesh(cloudsGeometry, cloudsMaterial)
-
+	atmosphere = new THREE.Mesh(atmosphereGeometry, atmosphereMaterial)
     // Apply common rotations
     earth.rotateY(-0.3)
     clouds.rotateY(-0.3)
@@ -147,6 +161,7 @@ const initScene = async () => {
     // Add to group
     group.add(earth)
     group.add(clouds)
+	group.add(atmosphere)
 
     clock = new THREE.Clock()
 

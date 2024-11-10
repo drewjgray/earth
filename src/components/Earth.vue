@@ -22,7 +22,7 @@ const container = ref(null)
 
 // Constants (previously controlled by UI)
 const SUN_INTENSITY = 4.0
-const ROTATION_SPEED = 2.0
+const ROTATION_SPEED = 1.0
 
 // Three.js variables
 let scene, camera, dirLight, renderer, clock, controls, earth, clouds, atmosphere, group, composer
@@ -33,12 +33,7 @@ const textureLoader = new THREE.TextureLoader()
 const initScene = async () => {
     scene = new THREE.Scene()
 
-    camera = new THREE.PerspectiveCamera(
-        45,
-        window.innerWidth / window.innerHeight,
-        0.1,
-        100
-    )
+    camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 100)
     camera.position.z = 50
     camera.lookAt(new THREE.Vector3(0, 0, 0))
 
@@ -104,7 +99,6 @@ const initScene = async () => {
             uniform sampler2D tClouds;
             uniform float uv_xOffset;
         `);
-
 		shader.fragmentShader = shader.fragmentShader.replace('#include <roughnessmap_fragment>', `
 			float roughnessFactor = roughness;
 			#ifdef USE_ROUGHNESSMAP
@@ -113,7 +107,6 @@ const initScene = async () => {
 				roughnessFactor *= clamp(texelRoughness.g, 0.5, 1.0);
 			#endif
 		`);
-
         shader.fragmentShader = shader.fragmentShader.replace('#include <emissivemap_fragment>', `
 			#ifdef USE_EMISSIVEMAP
 				vec4 emissiveColor = texture2D( emissiveMap, vEmissiveMapUv );
@@ -126,16 +119,13 @@ const initScene = async () => {
             vec3 atmosphere = vec3( 0.3, 0.6, 1.0 ) * pow(intensity, 5.0);
             diffuseColor.rgb += atmosphere;
         `)
-		
-
+	
         earthMaterial.userData.shader = shader
     }
 
     const cloudsMaterial = new THREE.MeshStandardMaterial({
         alphaMap: cloudsMap,
         transparent: true,
-		// set opacity to 0.5
-		opacity: 0.75,
     })
 
 	const atmosphereMaterial = new THREE.ShaderMaterial({
@@ -143,7 +133,7 @@ const initScene = async () => {
 		fragmentShader: fragmentShader,
 		uniforms: {
 			atmOpacity: { value: 0.7 },
-			atmPowFactor: { value: 4.1 },
+			atmPowFactor: { value: 4.5 },
 			atmMultiplier: { value: 9.5 },
 		},
 		blending: THREE.AdditiveBlending,

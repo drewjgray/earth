@@ -1,5 +1,5 @@
 <template>
-  <div ref="container" class="earth-container"></div>
+    <div ref="container" class="earth-container"></div>
 </template>
 
 <script setup>
@@ -9,6 +9,11 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 import Albedo from '../assets/Albedo.jpg'
 import Bump from '../assets/Bump.jpg'
 import Clouds from '../assets/Clouds.png'
+import Ocean from '../assets/Ocean.png'
+import NightLights from '../assets/night_lights_modified.png'
+import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer'
+import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass'
+import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass'
 
 const textureLoader = new THREE.TextureLoader()
 
@@ -17,120 +22,186 @@ const container = ref(null)
 
 // Constants (previously controlled by UI)
 const SUN_INTENSITY = 4.0
-const ROTATION_SPEED = 0.2
+const ROTATION_SPEED = 2.0
 
 // Three.js variables
-let scene, camera, dirLight, renderer, controls, earth, clouds, group
+let scene, camera, dirLight, renderer, clock, controls, earth, clouds, group, composer
 let animationFrameId = null
 
+
 const initScene = async () => {
-  scene = new THREE.Scene()
+    scene = new THREE.Scene()
 
-  camera = new THREE.PerspectiveCamera(
-    45,
-    window.innerWidth / window.innerHeight,
-    0.1,
-    100
-  )
-  camera.position.z = 50
-  camera.lookAt(new THREE.Vector3(0, 0, 0))
+    camera = new THREE.PerspectiveCamera(
+        45,
+        window.innerWidth / window.innerHeight,
+        0.1,
+        100
+    )
+    camera.position.z = 50
+    camera.lookAt(new THREE.Vector3(0, 0, 0))
 
-  renderer = new THREE.WebGLRenderer({ antialias: true })
-  renderer.setSize(window.innerWidth, window.innerHeight)
-  renderer.setPixelRatio(window.devicePixelRatio)
-  renderer.outputColorSpace = THREE.SRGBColorSpace
-  container.value.appendChild(renderer.domElement)
+    renderer = new THREE.WebGLRenderer({ antialias: true })
+    renderer.setSize(window.innerWidth, window.innerHeight)
+    renderer.setPixelRatio(window.devicePixelRatio)
+    renderer.outputColorSpace = THREE.SRGBColorSpace
+    container.value.appendChild(renderer.domElement)
 
-  controls = new OrbitControls(camera, renderer.domElement)
-  controls.enableDamping = true
+    composer = new EffectComposer(renderer)
+    const renderPass = new RenderPass(scene, camera)
+    composer.addPass(renderPass)
 
-  dirLight = new THREE.DirectionalLight(0xffffff, SUN_INTENSITY)
-  dirLight.position.set(-50, 0, 30)
-  scene.add(dirLight)
+    controls = new OrbitControls(camera, renderer.domElement)
+    controls.enableDamping = true
 
-  const ambientLight = new THREE.AmbientLight(0x404040)
-  scene.add(ambientLight)
+    dirLight = new THREE.DirectionalLight(0xffffff, SUN_INTENSITY)
+    dirLight.position.set(-50, 0, 30)
+    scene.add(dirLight)
 
-  group = new THREE.Group()
-  group.rotation.z = (23.5 / 360) * 2 * Math.PI
-  scene.add(group)
+    const ambientLight = new THREE.AmbientLight(0x404040)
+    scene.add(ambientLight)
 
-  // Load all textures first
-  const [albedoMap, bumpMap, cloudsMap] = await Promise.all([
-    textureLoader.loadAsync(Albedo),
-    textureLoader.loadAsync(Bump),
-    textureLoader.loadAsync(Clouds)
-  ])
-  albedoMap.colorSpace = THREE.SRGBColorSpace
+    group = new THREE.Group()
+    group.rotation.z = (23.5 / 360) * 2 * Math.PI
+    scene.add(group)
 
-  // Create geometries
-  const sphereGeometry = new THREE.SphereGeometry(10, 64, 64)
-  const cloudsGeometry = new THREE.SphereGeometry(10.05, 64, 64)
+    // Load all textures first
+    const [albedoMap, bumpMap, cloudsMap, oceanMap, lightsMap] = await Promise.all([
+        textureLoader.loadAsync(Albedo),
+        textureLoader.loadAsync(Bump),
+        textureLoader.loadAsync(Clouds),
+        textureLoader.loadAsync(Ocean),
+        textureLoader.loadAsync(NightLights)
+    ])
+    albedoMap.colorSpace = THREE.SRGBColorSpace
 
-  // Create materials
-  const earthMaterial = new THREE.MeshStandardMaterial({
-    map: albedoMap,
-    bumpMap: bumpMap,
-    bumpScale: 10,
-  })
-  const cloudsMaterial = new THREE.MeshStandardMaterial({
-    alphaMap: cloudsMap,
-    transparent: true,
-  })
+    // Create geometries
+    const sphereGeometry = new THREE.SphereGeometry(10, 64, 64)
+    const cloudsGeometry = new THREE.SphereGeometry(10.05, 64, 64)
 
-  // Create meshes
-  earth = new THREE.Mesh(sphereGeometry, earthMaterial)
-  clouds = new THREE.Mesh(cloudsGeometry, cloudsMaterial)
+    // Create materials
+    const earthMaterial = new THREE.MeshStandardMaterial({
+        map: albedoMap,
+        bumpMap: bumpMap,
+        bumpScale: 10,
+		roughnessMap: oceanMap,
+		metalness: 0.1,
+		metalnessMap: oceanMap,
+		emissiveMap: lightsMap,
+		emissive: new THREE.Color(0xffff88),
+    })
 
-  // Apply common rotations
-  earth.rotateY(-0.3)
-  clouds.rotateY(-0.3)
+    earthMaterial.onBeforeCompile = function (shader) {
 
-  // Add to group
-  group.add(earth)
-  group.add(clouds)
+        shader.uniforms.tClouds = { value: cloudsMap }
+        shader.uniforms.tClouds.value.wrapS = THREE.RepeatWrapping;
+        shader.uniforms.uv_xOffset = { value: 0 }
 
-  animate()
+        shader.fragmentShader = shader.fragmentShader.replace('#include <common>', `
+            #include <common>
+            uniform sampler2D tClouds;
+            uniform float uv_xOffset;
+        `);
+
+		shader.fragmentShader = shader.fragmentShader.replace('#include <roughnessmap_fragment>', `
+			float roughnessFactor = roughness;
+			#ifdef USE_ROUGHNESSMAP
+				vec4 texelRoughness = texture2D( roughnessMap, vRoughnessMapUv );
+				texelRoughness = vec4(1.0) - texelRoughness;
+				roughnessFactor *= clamp(texelRoughness.g, 0.5, 1.0);
+			#endif
+		`);
+
+        shader.fragmentShader = shader.fragmentShader.replace('#include <emissivemap_fragment>', `
+			#ifdef USE_EMISSIVEMAP
+				vec4 emissiveColor = texture2D( emissiveMap, vEmissiveMapUv );
+				emissiveColor *= 1.0 - smoothstep(-0.02, 0.0, dot(normal, directionalLights[0].direction));
+				totalEmissiveRadiance *= emissiveColor.rgb;
+			#endif
+            float cloudsMapValue = texture2D(tClouds, vec2(vMapUv.x - uv_xOffset, vMapUv.y)).r;
+            diffuseColor.rgb *= max(1.0 - cloudsMapValue, 0.2 );
+            float intensity = 1.4 - dot( normal, vec3( 0.0, 0.0, 1.0 ) );
+            vec3 atmosphere = vec3( 0.3, 0.6, 1.0 ) * pow(intensity, 5.0);
+            diffuseColor.rgb += atmosphere;
+        `)
+		
+
+        earthMaterial.userData.shader = shader
+    }
+
+    const cloudsMaterial = new THREE.MeshStandardMaterial({
+        alphaMap: cloudsMap,
+        transparent: true,
+		// set opacity to 0.5
+		opacity: 0.75,
+    })
+
+    // Create meshes
+    earth = new THREE.Mesh(sphereGeometry, earthMaterial)
+    clouds = new THREE.Mesh(cloudsGeometry, cloudsMaterial)
+
+    // Apply common rotations
+    earth.rotateY(-0.3)
+    clouds.rotateY(-0.3)
+
+    // Add to group
+    group.add(earth)
+    group.add(clouds)
+
+    clock = new THREE.Clock()
+
+    animate()
 }
 
 const animate = () => {
-  animationFrameId = requestAnimationFrame(animate)
-  controls.update()
-  earth.rotateY(0.005 * ROTATION_SPEED)
-  clouds.rotateY(0.006 * ROTATION_SPEED)
-  renderer.render(scene, camera)
+    animationFrameId = requestAnimationFrame(animate)
+    
+    const delta = clock.getDelta()
+
+    controls.update()
+    earth.rotateY(delta * 0.005 * ROTATION_SPEED)
+    clouds.rotateY(delta * 0.01 * ROTATION_SPEED)
+    const shader = earth.material.userData.shader
+    if (shader) {
+        let offset = (delta * 0.005 * ROTATION_SPEED) / (2 * Math.PI)
+        shader.uniforms.uv_xOffset.value += offset % 1
+    }
+    composer.render()
 }
 
 const handleResize = () => {
-  if (camera && renderer) {
-    camera.aspect = window.innerWidth / window.innerHeight
-    camera.updateProjectionMatrix()
-    renderer.setSize(window.innerWidth, window.innerHeight)
-  }
+    if (camera && renderer && composer) {
+        camera.aspect = window.innerWidth / window.innerHeight
+        camera.updateProjectionMatrix()
+        renderer.setSize(window.innerWidth, window.innerHeight)
+        composer.setSize(window.innerWidth, window.innerHeight)
+    }
 }
 
 onMounted(() => {
-  initScene()
-  window.addEventListener('resize', handleResize)
+    initScene()
+    window.addEventListener('resize', handleResize)
 })
 
 onBeforeUnmount(() => {
-  if (animationFrameId) {
-    cancelAnimationFrame(animationFrameId)
-  }
-  window.removeEventListener('resize', handleResize)
-  
-  if (renderer) {
-    renderer.dispose()
-  }
+    if (animationFrameId) {
+        cancelAnimationFrame(animationFrameId)
+    }
+    window.removeEventListener('resize', handleResize)
+    
+    if (renderer) {
+        renderer.dispose()
+    }
+    if (composer) {
+        composer.dispose()
+    }
 })
 </script>
 
 <style scoped>
 .earth-container {
-  width: 100%;
-  height: 100vh;
-  position: relative;
+    width: 100%;
+    height: 100vh;
+    position: relative;
 }
 </style>
-

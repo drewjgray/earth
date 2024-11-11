@@ -6,13 +6,16 @@
 import { ref, onMounted, onBeforeUnmount } from 'vue'
 import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
+import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer'
+import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass'
+
 import Albedo from '../assets/Albedo.jpg'
 import Bump from '../assets/Bump.jpg'
 import Clouds from '../assets/Clouds.png'
 import Ocean from '../assets/Ocean.png'
 import NightLights from '../assets/night_lights_modified.png'
-import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer'
-import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass'
+import GaiaSky from '../assets/Gaia_EDR3_darkened.png'
+
 import vertexShader from '../shaders/vertex.glsl'
 import fragmentShader from '../shaders/fragment.glsl'
 
@@ -62,12 +65,13 @@ const initScene = async () => {
     scene.add(group)
 
     // Load all textures first
-    const [albedoMap, bumpMap, cloudsMap, oceanMap, lightsMap] = await Promise.all([
+    const [albedoMap, bumpMap, cloudsMap, oceanMap, lightsMap, envMap] = await Promise.all([
         textureLoader.loadAsync(Albedo),
         textureLoader.loadAsync(Bump),
         textureLoader.loadAsync(Clouds),
         textureLoader.loadAsync(Ocean),
-        textureLoader.loadAsync(NightLights)
+        textureLoader.loadAsync(NightLights),
+        textureLoader.loadAsync(GaiaSky)
     ])
     albedoMap.colorSpace = THREE.SRGBColorSpace
 
@@ -144,6 +148,7 @@ const initScene = async () => {
     earth = new THREE.Mesh(sphereGeometry, earthMaterial)
     clouds = new THREE.Mesh(cloudsGeometry, cloudsMaterial)
 	atmosphere = new THREE.Mesh(atmosphereGeometry, atmosphereMaterial)
+	
     // Apply common rotations
     earth.rotateY(-0.3)
     clouds.rotateY(-0.3)

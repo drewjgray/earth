@@ -1,16 +1,20 @@
 import { createApp } from 'vue'
 import { initializeApp } from "firebase/app";
+import { getAnalytics } from "firebase/analytics";
 import App from './App.vue'
 
 const firebaseConfig = {
-    apiKey: "AIzaSyAjwvKNXGHc1SnZ6X41yK9xbxFpNTy8ets",
-    authDomain: "coral-gardeners-playground.firebaseapp.com",
-    projectId: "coral-gardeners-playground",
-    storageBucket: "coral-gardeners-playground.firebasestorage.app",
-    messagingSenderId: "642512438673",
-    appId: "1:642512438673:web:cccf26acbdfc3961b8c630"
+    apiKey: "AIzaSyC7zRaOUz84DLfitY9F2EyCL6z-Thkp-_w",
+    authDomain: "expedition-labs.firebaseapp.com",
+    projectId: "expedition-labs",
+    storageBucket: "expedition-labs.firebasestorage.app",
+    messagingSenderId: "896831660441",
+    appId: "1:896831660441:web:25ff4d3864e9127584b308",
+    measurementId: "G-9M1BJ1B6M8"
 };
 
+
 const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app)
 
 createApp(App).mount('#app')

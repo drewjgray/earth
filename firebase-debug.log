@@ -1,0 +1,106 @@
+[debug] [2024-11-24T22:51:38.797Z] ----------------------------------------------------------------------
+[debug] [2024-11-24T22:51:38.799Z] Command:       /Users/drew/.nvm/versions/node/v20.11.0/bin/node /Users/drew/.nvm/versions/node/v20.11.0/bin/firebase deploy
+[debug] [2024-11-24T22:51:38.799Z] CLI Version:   13.24.2
+[debug] [2024-11-24T22:51:38.799Z] Platform:      darwin
+[debug] [2024-11-24T22:51:38.799Z] Node Version:  v20.11.0
+[debug] [2024-11-24T22:51:38.799Z] Time:          Sun Nov 24 2024 12:51:38 GMT-1000 (GMT-10:00)
+[debug] [2024-11-24T22:51:38.799Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2024-11-24T22:51:38.831Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2024-11-24T22:51:38.831Z] > authorizing via signed-in user (drewjgray@gmail.com)
+[debug] [2024-11-24T22:51:38.831Z] [iam] checking project expedition-labs for permissions ["firebase.projects.get","firebasehosting.sites.update"]
+[debug] [2024-11-24T22:51:38.832Z] Checked if tokens are valid: true, expires at: 1732490441015
+[debug] [2024-11-24T22:51:38.832Z] Checked if tokens are valid: true, expires at: 1732490441015
+[debug] [2024-11-24T22:51:38.832Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/expedition-labs:testIamPermissions [none]
+[debug] [2024-11-24T22:51:38.832Z] >>> [apiv2][(partial)header] POST https://cloudresourcemanager.googleapis.com/v1/projects/expedition-labs:testIamPermissions x-goog-quota-user=projects/expedition-labs
+[debug] [2024-11-24T22:51:38.832Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/expedition-labs:testIamPermissions {"permissions":["firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2024-11-24T22:51:39.528Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/expedition-labs:testIamPermissions 200
+[debug] [2024-11-24T22:51:39.529Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/expedition-labs:testIamPermissions {"permissions":["firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2024-11-24T22:51:39.529Z] Checked if tokens are valid: true, expires at: 1732490441015
+[debug] [2024-11-24T22:51:39.529Z] Checked if tokens are valid: true, expires at: 1732490441015
+[debug] [2024-11-24T22:51:39.529Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/expedition-labs [none]
+[debug] [2024-11-24T22:51:40.023Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/expedition-labs 200
+[debug] [2024-11-24T22:51:40.023Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/expedition-labs {"projectId":"expedition-labs","projectNumber":"896831660441","displayName":"Expedition Labs","name":"projects/expedition-labs","resources":{"hostingSite":"expedition-labs"},"state":"ACTIVE","etag":"1_9afd446f-9b32-46fc-a392-5a9244cd0c5e"}
+[info] 
+[info] === Deploying to 'expedition-labs'...
+[info] 
+[info] i  deploying hosting 
+[debug] [2024-11-24T22:51:40.027Z] Checked if tokens are valid: true, expires at: 1732490441015
+[debug] [2024-11-24T22:51:40.027Z] Checked if tokens are valid: true, expires at: 1732490441015
+[debug] [2024-11-24T22:51:40.027Z] >>> [apiv2][query] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/expedition-labs/versions [none]
+[debug] [2024-11-24T22:51:40.027Z] >>> [apiv2][body] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/expedition-labs/versions {"status":"CREATED","labels":{"deployment-tool":"cli-firebase"}}
+[debug] [2024-11-24T22:51:41.623Z] <<< [apiv2][status] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/expedition-labs/versions 200
+[debug] [2024-11-24T22:51:41.623Z] <<< [apiv2][body] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/expedition-labs/versions {"name":"projects/896831660441/sites/expedition-labs/versions/bce519b3bf8eae6b","status":"CREATED","config":{},"labels":{"deployment-tool":"cli-firebase"}}
+[info] i  hosting[expedition-labs]: beginning deploy... 
+[info] i  hosting[expedition-labs]: found 13 files in dist 
+[debug] [2024-11-24T22:51:41.637Z] [hosting] uploading with 200 concurrency
+[debug] [2024-11-24T22:51:41.765Z] Checked if tokens are valid: true, expires at: 1732490441015
+[debug] [2024-11-24T22:51:41.765Z] Checked if tokens are valid: true, expires at: 1732490441015
+[debug] [2024-11-24T22:51:41.765Z] [hosting] hash cache [ZGlzdA] stored for 13 files
+[debug] [2024-11-24T22:51:41.765Z] [hosting][hash queue][FINAL] {"max":125,"min":6,"avg":40.30769230769231,"active":0,"complete":13,"success":13,"errored":0,"retried":0,"total":13,"elapsed":127}
+[debug] [2024-11-24T22:51:41.765Z] >>> [apiv2][query] POST https://firebasehosting.googleapis.com/v1beta1/projects/896831660441/sites/expedition-labs/versions/bce519b3bf8eae6b:populateFiles [none]
+[debug] [2024-11-24T22:51:41.765Z] >>> [apiv2][body] POST https://firebasehosting.googleapis.com/v1beta1/projects/896831660441/sites/expedition-labs/versions/bce519b3bf8eae6b:populateFiles {"files":{"/index.html":"ab2e88cbd2a1b8d6f184e91bd8d34660835dabe6b6e162addc11f88daccded97","/favicon.ico":"7a1a72943a1b2d7ed41d75574715a454ac9bfb21b636100c59ccd713ca3e86e1","/js/app.e6469a32.js":"48bbf7eca785d8f0d5ebf68a510e3cd97a6498cd5a212b9553dccc27ae3201e3","/js/app.e6469a32.js.map":"cea5c7fca82ab422e7f43402b12b11e3ce1ad37ee464fa5e016176b83fa78213","/css/app.6992017d.css":"e4c829e02029d26d89187c03103a31d765093ebc47112bf3ddf5d01703c216ef","/img/Ocean.f105e2ad.png":"5f764b5c648a307ed09d53f61ef5b07c3bda42aa8a07effc72612e9eaa500171","/js/chunk-vendors.cfac797e.js":"61b9b417f9caea9910fb59483d4b9a8b9f850403369cd1cd9b2b08e2ae082672","/img/Albedo.3c214afe.jpg":"f39d3aadaa46f3da3b8bdf789b16a3ab2829e8a93e23c79cb55e398c807cde6e","/img/Bump.a08c7805.jpg":"e0ccfec6bbad6001a42d134406f92d8e821267eb2bc0c8044c490a2acc9fcc58","/img/night_lights_modified.8470f57e.png":"4e2bd6d341a2513362e4bd0cffcdaf03d0f03fcff7242e1d2a644ea6262d91a5","/img/Clouds.aaef0f1f.png":"e078704ff1f0286089d82e274b7acfd3987fc2c13a8b94087420c87da59585be","/img/Gaia_EDR3_darkened.5a50f4fe.png":"13db7a7351850d6d53433ad8942359a58e77c16c7b89b1bcd64b5244a63c3a95","/js/chunk-vendors.cfac797e.js.map":"9917025e95fbe906e933b041d737cbe006335519b66017eaf92a84f77512839f"}}
+[debug] [2024-11-24T22:51:42.242Z] <<< [apiv2][status] POST https://firebasehosting.googleapis.com/v1beta1/projects/896831660441/sites/expedition-labs/versions/bce519b3bf8eae6b:populateFiles 200
+[debug] [2024-11-24T22:51:42.243Z] <<< [apiv2][body] POST https://firebasehosting.googleapis.com/v1beta1/projects/896831660441/sites/expedition-labs/versions/bce519b3bf8eae6b:populateFiles {"uploadRequiredHashes":["cea5c7fca82ab422e7f43402b12b11e3ce1ad37ee464fa5e016176b83fa78213","61b9b417f9caea9910fb59483d4b9a8b9f850403369cd1cd9b2b08e2ae082672","13db7a7351850d6d53433ad8942359a58e77c16c7b89b1bcd64b5244a63c3a95","f39d3aadaa46f3da3b8bdf789b16a3ab2829e8a93e23c79cb55e398c807cde6e","4e2bd6d341a2513362e4bd0cffcdaf03d0f03fcff7242e1d2a644ea6262d91a5","5f764b5c648a307ed09d53f61ef5b07c3bda42aa8a07effc72612e9eaa500171","ab2e88cbd2a1b8d6f184e91bd8d34660835dabe6b6e162addc11f88daccded97","48bbf7eca785d8f0d5ebf68a510e3cd97a6498cd5a212b9553dccc27ae3201e3","e0ccfec6bbad6001a42d134406f92d8e821267eb2bc0c8044c490a2acc9fcc58","e078704ff1f0286089d82e274b7acfd3987fc2c13a8b94087420c87da59585be","9917025e95fbe906e933b041d737cbe006335519b66017eaf92a84f77512839f"],"uploadUrl":"https://upload-firebasehosting.googleapis.com/upload/sites/expedition-labs/versions/bce519b3bf8eae6b/files"}
+[debug] [2024-11-24T22:51:42.243Z] Checked if tokens are valid: true, expires at: 1732490441015
+[debug] [2024-11-24T22:51:42.243Z] Checked if tokens are valid: true, expires at: 1732490441015
+[debug] [2024-11-24T22:51:42.243Z] Checked if tokens are valid: true, expires at: 1732490441015
+[debug] [2024-11-24T22:51:42.243Z] Checked if tokens are valid: true, expires at: 1732490441015
+[debug] [2024-11-24T22:51:42.243Z] Checked if tokens are valid: true, expires at: 1732490441015
+[debug] [2024-11-24T22:51:42.243Z] Checked if tokens are valid: true, expires at: 1732490441015
+[debug] [2024-11-24T22:51:42.243Z] Checked if tokens are valid: true, expires at: 1732490441015
+[debug] [2024-11-24T22:51:42.243Z] Checked if tokens are valid: true, expires at: 1732490441015
+[debug] [2024-11-24T22:51:42.243Z] Checked if tokens are valid: true, expires at: 1732490441015
+[debug] [2024-11-24T22:51:42.243Z] Checked if tokens are valid: true, expires at: 1732490441015
+[debug] [2024-11-24T22:51:42.243Z] Checked if tokens are valid: true, expires at: 1732490441015
+[debug] [2024-11-24T22:51:42.244Z] Checked if tokens are valid: true, expires at: 1732490441015
+[debug] [2024-11-24T22:51:42.244Z] Checked if tokens are valid: true, expires at: 1732490441015
+[debug] [2024-11-24T22:51:42.244Z] Checked if tokens are valid: true, expires at: 1732490441015
+[debug] [2024-11-24T22:51:42.244Z] Checked if tokens are valid: true, expires at: 1732490441015
+[debug] [2024-11-24T22:51:42.244Z] Checked if tokens are valid: true, expires at: 1732490441015
+[debug] [2024-11-24T22:51:42.244Z] Checked if tokens are valid: true, expires at: 1732490441015
+[debug] [2024-11-24T22:51:42.244Z] Checked if tokens are valid: true, expires at: 1732490441015
+[debug] [2024-11-24T22:51:42.244Z] Checked if tokens are valid: true, expires at: 1732490441015
+[debug] [2024-11-24T22:51:42.244Z] Checked if tokens are valid: true, expires at: 1732490441015
+[debug] [2024-11-24T22:51:42.244Z] Checked if tokens are valid: true, expires at: 1732490441015
+[debug] [2024-11-24T22:51:42.244Z] Checked if tokens are valid: true, expires at: 1732490441015
+[debug] [2024-11-24T22:51:42.244Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/expedition-labs/versions/bce519b3bf8eae6b/files/cea5c7fca82ab422e7f43402b12b11e3ce1ad37ee464fa5e016176b83fa78213 [none]
+[debug] [2024-11-24T22:51:42.244Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/expedition-labs/versions/bce519b3bf8eae6b/files/cea5c7fca82ab422e7f43402b12b11e3ce1ad37ee464fa5e016176b83fa78213 [stream]
+[debug] [2024-11-24T22:51:42.245Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/expedition-labs/versions/bce519b3bf8eae6b/files/61b9b417f9caea9910fb59483d4b9a8b9f850403369cd1cd9b2b08e2ae082672 [none]
+[debug] [2024-11-24T22:51:42.245Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/expedition-labs/versions/bce519b3bf8eae6b/files/61b9b417f9caea9910fb59483d4b9a8b9f850403369cd1cd9b2b08e2ae082672 [stream]
+[debug] [2024-11-24T22:51:42.245Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/expedition-labs/versions/bce519b3bf8eae6b/files/13db7a7351850d6d53433ad8942359a58e77c16c7b89b1bcd64b5244a63c3a95 [none]
+[debug] [2024-11-24T22:51:42.245Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/expedition-labs/versions/bce519b3bf8eae6b/files/13db7a7351850d6d53433ad8942359a58e77c16c7b89b1bcd64b5244a63c3a95 [stream]
+[debug] [2024-11-24T22:51:42.245Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/expedition-labs/versions/bce519b3bf8eae6b/files/f39d3aadaa46f3da3b8bdf789b16a3ab2829e8a93e23c79cb55e398c807cde6e [none]
+[debug] [2024-11-24T22:51:42.245Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/expedition-labs/versions/bce519b3bf8eae6b/files/f39d3aadaa46f3da3b8bdf789b16a3ab2829e8a93e23c79cb55e398c807cde6e [stream]
+[debug] [2024-11-24T22:51:42.246Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/expedition-labs/versions/bce519b3bf8eae6b/files/4e2bd6d341a2513362e4bd0cffcdaf03d0f03fcff7242e1d2a644ea6262d91a5 [none]
+[debug] [2024-11-24T22:51:42.246Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/expedition-labs/versions/bce519b3bf8eae6b/files/4e2bd6d341a2513362e4bd0cffcdaf03d0f03fcff7242e1d2a644ea6262d91a5 [stream]
+[debug] [2024-11-24T22:51:42.246Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/expedition-labs/versions/bce519b3bf8eae6b/files/5f764b5c648a307ed09d53f61ef5b07c3bda42aa8a07effc72612e9eaa500171 [none]
+[debug] [2024-11-24T22:51:42.246Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/expedition-labs/versions/bce519b3bf8eae6b/files/5f764b5c648a307ed09d53f61ef5b07c3bda42aa8a07effc72612e9eaa500171 [stream]
+[debug] [2024-11-24T22:51:42.247Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/expedition-labs/versions/bce519b3bf8eae6b/files/ab2e88cbd2a1b8d6f184e91bd8d34660835dabe6b6e162addc11f88daccded97 [none]
+[debug] [2024-11-24T22:51:42.247Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/expedition-labs/versions/bce519b3bf8eae6b/files/ab2e88cbd2a1b8d6f184e91bd8d34660835dabe6b6e162addc11f88daccded97 [stream]
+[debug] [2024-11-24T22:51:42.247Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/expedition-labs/versions/bce519b3bf8eae6b/files/48bbf7eca785d8f0d5ebf68a510e3cd97a6498cd5a212b9553dccc27ae3201e3 [none]
+[debug] [2024-11-24T22:51:42.247Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/expedition-labs/versions/bce519b3bf8eae6b/files/48bbf7eca785d8f0d5ebf68a510e3cd97a6498cd5a212b9553dccc27ae3201e3 [stream]
+[debug] [2024-11-24T22:51:42.248Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/expedition-labs/versions/bce519b3bf8eae6b/files/e0ccfec6bbad6001a42d134406f92d8e821267eb2bc0c8044c490a2acc9fcc58 [none]
+[debug] [2024-11-24T22:51:42.248Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/expedition-labs/versions/bce519b3bf8eae6b/files/e0ccfec6bbad6001a42d134406f92d8e821267eb2bc0c8044c490a2acc9fcc58 [stream]
+[debug] [2024-11-24T22:51:42.248Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/expedition-labs/versions/bce519b3bf8eae6b/files/e078704ff1f0286089d82e274b7acfd3987fc2c13a8b94087420c87da59585be [none]
+[debug] [2024-11-24T22:51:42.248Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/expedition-labs/versions/bce519b3bf8eae6b/files/e078704ff1f0286089d82e274b7acfd3987fc2c13a8b94087420c87da59585be [stream]
+[debug] [2024-11-24T22:51:42.248Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/expedition-labs/versions/bce519b3bf8eae6b/files/9917025e95fbe906e933b041d737cbe006335519b66017eaf92a84f77512839f [none]
+[debug] [2024-11-24T22:51:42.248Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/expedition-labs/versions/bce519b3bf8eae6b/files/9917025e95fbe906e933b041d737cbe006335519b66017eaf92a84f77512839f [stream]
+[debug] [2024-11-24T22:51:42.249Z] [hosting][populate queue][FINAL] {"max":479,"min":479,"avg":479,"active":0,"complete":1,"success":1,"errored":0,"retried":0,"total":1,"elapsed":484}
+[debug] [2024-11-24T22:51:42.249Z] [hosting] uploads queued: 11
+[debug] [2024-11-24T22:51:43.064Z] <<< [apiv2][status] POST https://upload-firebasehosting.googleapis.com/upload/sites/expedition-labs/versions/bce519b3bf8eae6b/files/cea5c7fca82ab422e7f43402b12b11e3ce1ad37ee464fa5e016176b83fa78213 200
+[debug] [2024-11-24T22:51:43.064Z] <<< [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/expedition-labs/versions/bce519b3bf8eae6b/files/cea5c7fca82ab422e7f43402b12b11e3ce1ad37ee464fa5e016176b83fa78213 [stream]
+[debug] [2024-11-24T22:51:43.240Z] <<< [apiv2][status] POST https://upload-firebasehosting.googleapis.com/upload/sites/expedition-labs/versions/bce519b3bf8eae6b/files/48bbf7eca785d8f0d5ebf68a510e3cd97a6498cd5a212b9553dccc27ae3201e3 200
+[debug] [2024-11-24T22:51:43.240Z] <<< [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/expedition-labs/versions/bce519b3bf8eae6b/files/48bbf7eca785d8f0d5ebf68a510e3cd97a6498cd5a212b9553dccc27ae3201e3 [stream]
+[debug] [2024-11-24T22:51:43.500Z] <<< [apiv2][status] POST https://upload-firebasehosting.googleapis.com/upload/sites/expedition-labs/versions/bce519b3bf8eae6b/files/ab2e88cbd2a1b8d6f184e91bd8d34660835dabe6b6e162addc11f88daccded97 200
+[debug] [2024-11-24T22:51:43.500Z] <<< [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/expedition-labs/versions/bce519b3bf8eae6b/files/ab2e88cbd2a1b8d6f184e91bd8d34660835dabe6b6e162addc11f88daccded97 [stream]
+[debug] [2024-11-24T22:51:44.394Z] <<< [apiv2][status] POST https://upload-firebasehosting.googleapis.com/upload/sites/expedition-labs/versions/bce519b3bf8eae6b/files/5f764b5c648a307ed09d53f61ef5b07c3bda42aa8a07effc72612e9eaa500171 200
+[debug] [2024-11-24T22:51:44.395Z] <<< [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/expedition-labs/versions/bce519b3bf8eae6b/files/5f764b5c648a307ed09d53f61ef5b07c3bda42aa8a07effc72612e9eaa500171 [stream]
+[debug] [2024-11-24T22:51:45.434Z] <<< [apiv2][status] POST https://upload-firebasehosting.googleapis.com/upload/sites/expedition-labs/versions/bce519b3bf8eae6b/files/61b9b417f9caea9910fb59483d4b9a8b9f850403369cd1cd9b2b08e2ae082672 200
+[debug] [2024-11-24T22:51:45.434Z] <<< [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/expedition-labs/versions/bce519b3bf8eae6b/files/61b9b417f9caea9910fb59483d4b9a8b9f850403369cd1cd9b2b08e2ae082672 [stream]
+[debug] [2024-11-24T22:51:45.672Z] <<< [apiv2][status] POST https://upload-firebasehosting.googleapis.com/upload/sites/expedition-labs/versions/bce519b3bf8eae6b/files/f39d3aadaa46f3da3b8bdf789b16a3ab2829e8a93e23c79cb55e398c807cde6e 200
+[debug] [2024-11-24T22:51:45.672Z] <<< [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/expedition-labs/versions/bce519b3bf8eae6b/files/f39d3aadaa46f3da3b8bdf789b16a3ab2829e8a93e23c79cb55e398c807cde6e [stream]
+[debug] [2024-11-24T22:51:45.747Z] <<< [apiv2][status] POST https://upload-firebasehosting.googleapis.com/upload/sites/expedition-labs/versions/bce519b3bf8eae6b/files/e0ccfec6bbad6001a42d134406f92d8e821267eb2bc0c8044c490a2acc9fcc58 200
+[debug] [2024-11-24T22:51:45.747Z] <<< [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/expedition-labs/versions/bce519b3bf8eae6b/files/e0ccfec6bbad6001a42d134406f92d8e821267eb2bc0c8044c490a2acc9fcc58 [stream]
+[debug] [2024-11-24T22:51:47.308Z] <<< [apiv2][status] POST https://upload-firebasehosting.googleapis.com/upload/sites/expedition-labs/versions/bce519b3bf8eae6b/files/e078704ff1f0286089d82e274b7acfd3987fc2c13a8b94087420c87da59585be 200
+[debug] [2024-11-24T22:51:47.308Z] <<< [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/expedition-labs/versions/bce519b3bf8eae6b/files/e078704ff1f0286089d82e274b7acfd3987fc2c13a8b94087420c87da59585be [stream]
